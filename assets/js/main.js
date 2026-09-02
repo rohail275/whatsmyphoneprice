@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.querySelectorAll('.step-nav a[data-target]').forEach(function (link) {
+    document.querySelectorAll('.step-nav a[data-target], .step-nav-vertical a[data-target]').forEach(function (link) {
         link.addEventListener('click', function (e) {
             e.preventDefault();
             openSection(link.getAttribute('data-target'));

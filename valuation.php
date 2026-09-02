@@ -13,6 +13,9 @@ $chevron = '<svg class="chevron" width="18" height="18" viewBox="0 0 20 20" fill
 <h1><?= e(t('cta_start_valuation')) ?></h1>
 <p class="hint" style="margin-bottom:16px">Free, instant, no obligation. We never force you to sell to us. Tap a section to open it.</p>
 
+<div class="valuation-layout">
+<div class="valuation-main">
+
 <nav class="step-nav">
     <a href="#sec-phone" data-target="sec-phone"><span class="num">1</span> Phone</a>
     <a href="#sec-condition" data-target="sec-condition"><span class="num">2</span> Condition</a>
@@ -212,6 +215,25 @@ $chevron = '<svg class="chevron" width="18" height="18" viewBox="0 0 20 20" fill
 
     <button type="submit" class="btn btn-block" style="margin-top:16px"><?= e(t('submit')) ?></button>
 </form>
+
+</div>
+
+<aside class="valuation-sidebar">
+    <div class="card">
+        <p class="sidebar-title">Your Progress</p>
+        <nav class="step-nav-vertical">
+            <a href="#sec-phone" data-target="sec-phone"><span class="num">1</span> Phone</a>
+            <a href="#sec-condition" data-target="sec-condition"><span class="num">2</span> Condition</a>
+            <a href="#sec-battery" data-target="sec-battery"><span class="num">3</span> Battery</a>
+            <a href="#sec-history" data-target="sec-history"><span class="num">4</span> History</a>
+            <a href="#sec-pta" data-target="sec-pta"><span class="num">5</span> PTA</a>
+            <a href="#sec-photos" data-target="sec-photos"><span class="num">6</span> Photos</a>
+        </nav>
+        <p class="hint" style="margin-top:14px">Free, instant, no obligation. We never force you to sell to us.</p>
+    </div>
+</aside>
+
+</div>
 
 <?php
 $extraFooterScripts = ['/assets/js/main.js'];
