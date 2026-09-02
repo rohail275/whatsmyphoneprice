@@ -1,0 +1,8 @@
+<?php
+// Copy this file to config/db.local.php (git-ignored) and fill in your
+// real cPanel/shared-hosting database credentials. Never commit the copy.
+
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'nirmgryp_phoneprice');
+define('DB_USER', 'nirmgryp_phone');
+define('DB_PASS', 'replace-with-real-password');

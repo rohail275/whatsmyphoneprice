@@ -1,0 +1,5 @@
+config/db.local.php
+uploads/**
+!uploads/**/
+!uploads/**/.gitkeep
+*.log
