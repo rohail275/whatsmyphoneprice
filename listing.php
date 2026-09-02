@@ -46,10 +46,17 @@ require_once __DIR__ . '/includes/header.php';
 <div class="alert alert-info">Your listing is live! Share the link with buyers, or wait for them to find it here.</div>
 <?php endif; ?>
 
+<?php if (!empty($_GET['verified'])): ?>
+<div class="alert alert-info">Phone verified — you now have the Verified Seller badge.</div>
+<?php endif; ?>
+
 <?php if (!empty($_GET['verify_user']) && !$listing['phone_verified']): ?>
 <div class="card">
     <h2>Verify your phone number</h2>
     <p>Get the "Verified Seller" badge — buyers trust verified listings more. We sent a 6-digit code by SMS.</p>
+    <?php if (!empty($_GET['verify_error'])): ?>
+        <p class="alert alert-danger">That code is incorrect or expired. Please try again.</p>
+    <?php endif; ?>
     <form action="/verify-otp.php" method="post">
         <input type="hidden" name="user_id" value="<?= (int) $_GET['verify_user'] ?>">
         <input type="hidden" name="redirect" value="/listing.php?id=<?= (int) $id ?>">
@@ -109,6 +116,7 @@ require_once __DIR__ . '/includes/header.php';
         <?php endif; ?>
     </p>
     <p>Contact: <?= e($listing['seller_phone']) ?></p>
+    <p class="hint">Completed a deal with this seller? <a href="/rate.php?listing_id=<?= (int) $id ?>">Leave a rating</a>.</p>
 </div>
 
 <div class="alert alert-warning">

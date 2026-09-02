@@ -11,8 +11,8 @@ $sql = 'SELECT l.id, l.title, l.asking_price_pkr, l.city, l.area, l.created_at,
         FROM listings l
         JOIN valuations v ON v.id = l.valuation_id
         JOIN phones p ON p.id = v.phone_id
-        WHERE l.status = "active"';
-$params = [];
+        WHERE l.status = ?';
+$params = ['active'];
 if ($city !== '') {
     $sql .= ' AND l.city = ?';
     $params[] = $city;
@@ -27,7 +27,7 @@ $stmt = $db->prepare($sql);
 $stmt->execute($params);
 $listings = $stmt->fetchAll();
 
-$cities = $db->query('SELECT DISTINCT city FROM listings WHERE status = "active" ORDER BY city')->fetchAll(PDO::FETCH_COLUMN);
+$cities = $db->query("SELECT DISTINCT city FROM listings WHERE status = 'active' ORDER BY city")->fetchAll(PDO::FETCH_COLUMN);
 $brands = $db->query('SELECT DISTINCT brand FROM phones ORDER BY brand')->fetchAll(PDO::FETCH_COLUMN);
 
 $pageTitle = t('nav_listings') . ' — WhatsMyPhonePrice.com';
