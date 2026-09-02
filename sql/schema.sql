@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS valuations (
     -- result
     estimated_price_pkr DECIMAL(10,2) NOT NULL,
     price_breakdown_json TEXT DEFAULT NULL, -- stored deduction-by-deduction breakdown for the result page
+    ai_explanation TEXT DEFAULT NULL, -- Groq-generated plain-language summary, cached at valuation time (see README AI Usage)
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),

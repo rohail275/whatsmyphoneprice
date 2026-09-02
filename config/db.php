@@ -1,13 +1,20 @@
 <?php
 // Database connection config for shared hosting (cPanel-style MySQL).
-// Fill in real credentials before deploying; keep this file out of version
-// control in production (add config/db.php to .gitignore on the live server
-// if you ever change these away from placeholders).
+//
+// Real credentials never go in this file (it's committed to git). Instead,
+// create config/db.local.php — it's in .gitignore, so it stays only on
+// your server / local machine — defining the same constants with real
+// values. This file falls back to placeholders if that file is absent.
 
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'whatsmyphoneprice');
-define('DB_USER', 'your_db_user');
-define('DB_PASS', 'your_db_password');
+$localConfig = __DIR__ . '/db.local.php';
+if (is_file($localConfig)) {
+    require $localConfig;
+} else {
+    define('DB_HOST', 'localhost');
+    define('DB_NAME', 'your_db_name');
+    define('DB_USER', 'your_db_user');
+    define('DB_PASS', 'your_db_password');
+}
 
 define('SITE_URL', 'https://whatsmyphoneprice.com');
 define('CURRENT_YEAR', (int) date('Y'));

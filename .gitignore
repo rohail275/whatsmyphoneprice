@@ -1,0 +1,6 @@
+config/db.local.php
+config/groq.local.php
+uploads/**
+!uploads/**/
+!uploads/**/.gitkeep
+*.log

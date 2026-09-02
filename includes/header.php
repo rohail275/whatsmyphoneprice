@@ -12,7 +12,7 @@ $pageDescription = $pageDescription ?? "Get a free, instant estimated resale val
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= e($pageTitle) ?></title>
 <meta name="description" content="<?= e($pageDescription) ?>">
-<link rel="stylesheet" href="<?= SITE_URL ?>/assets/css/style.css">
+<link rel="stylesheet" href="/assets/css/style.css">
 <?php if (!empty($schemaJsonLd)): ?>
 <script type="application/ld+json"><?= $schemaJsonLd ?></script>
 <?php endif; ?>

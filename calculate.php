@@ -49,6 +49,9 @@ $input = [
 
 $result = calculate_valuation($phone, $input);
 
+$phoneName = $phone['brand'] . ' ' . $phone['model'] . ' ' . $phone['variant'];
+$aiExplanation = generate_price_explanation($phoneName, $result['breakdown'], $result['estimated_price']);
+
 $db = get_db();
 $stmt = $db->prepare('INSERT INTO valuations (
     phone_id, screen_condition, touch_working, touch_issue_notes,
@@ -56,8 +59,8 @@ $stmt = $db->prepare('INSERT INTO valuations (
     purchase_year, battery_full_day, battery_drains_fast, battery_random_shutoff,
     water_damage, repair_history, box_included, charger_included, headphones_included,
     pta_status, network_lock, imei, bill_available, color,
-    estimated_price_pkr, price_breakdown_json
-) VALUES (?,?,?,?, ?,?,?, ?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?)');
+    estimated_price_pkr, price_breakdown_json, ai_explanation
+) VALUES (?,?,?,?, ?,?,?, ?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?)');
 
 $stmt->execute([
     $phone['id'], $input['screen_condition'], (int) $input['touch_working'], $input['touch_issue_notes'] ?: null,
@@ -65,7 +68,7 @@ $stmt->execute([
     $input['purchase_year'], $input['battery_full_day'] === null ? null : (int) $input['battery_full_day'], (int) $input['battery_drains_fast'], (int) $input['battery_random_shutoff'],
     (int) $input['water_damage'], $input['repair_history'], (int) $input['box_included'], (int) $input['charger_included'], $input['headphones_included'] === null ? null : (int) $input['headphones_included'],
     $input['pta_status'], $input['network_lock'], $input['imei'], (int) $input['bill_available'], $input['color'] ?: null,
-    $result['estimated_price'], json_encode($result['breakdown']),
+    $result['estimated_price'], json_encode($result['breakdown']), $aiExplanation,
 ]);
 
 $valuationId = (int) $db->lastInsertId();

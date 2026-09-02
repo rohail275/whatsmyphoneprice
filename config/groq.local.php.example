@@ -1,0 +1,5 @@
+<?php
+// Copy this file to config/groq.local.php (git-ignored) and fill in your
+// real Groq API key (console.groq.com/keys). Never commit the copy.
+
+define('GROQ_API_KEY', 'gsk_replace_with_real_key');

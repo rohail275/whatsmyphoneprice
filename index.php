@@ -18,13 +18,13 @@ require_once __DIR__ . '/includes/header.php';
 $popularPhones = array_slice(get_all_phones(), 0, 8);
 ?>
 
-<section class="card" style="text-align:center">
+<section class="hero">
     <h1><?= e(t('site_tagline')) ?></h1>
     <p>Free · Instant · No obligation to sell to us. Ever.</p>
     <a class="btn" href="/valuation.php"><?= e(t('cta_start_valuation')) ?></a>
 </section>
 
-<section>
+<section style="margin-top:var(--space-5)">
     <h2>Popular Phones</h2>
     <div class="phone-grid">
         <?php foreach ($popularPhones as $p): ?>

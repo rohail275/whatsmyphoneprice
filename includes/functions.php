@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../config/groq.php';
 
 function e(?string $value): string
 {
@@ -11,6 +12,23 @@ function slugify(string $text): string
     $text = strtolower(trim($text));
     $text = preg_replace('/[^a-z0-9]+/', '-', $text);
     return trim($text, '-');
+}
+
+/**
+ * Renders a set of radio inputs styled as pill toggle buttons (see .toggle-group
+ * in style.css). Input/label are siblings, not nested, so the :checked + label
+ * CSS selector can style the active pill.
+ *
+ * @param array<string, string> $options value => visible label
+ */
+function toggle_group(string $name, array $options, string $selected): void
+{
+    foreach ($options as $value => $label) {
+        $id = $name . '_' . $value;
+        $checked = ((string) $value === $selected) ? ' checked' : '';
+        echo '<input type="radio" id="' . e($id) . '" name="' . e($name) . '" value="' . e((string) $value) . '"' . $checked . '>';
+        echo '<label for="' . e($id) . '">' . e($label) . '</label>';
+    }
 }
 
 function get_phone_by_id(int $id): ?array
@@ -172,4 +190,65 @@ function save_uploaded_photo(array $file, string $subdir): ?string
     $filename = bin2hex(random_bytes(16)) . '.' . $allowed[$mime];
     move_uploaded_file($file['tmp_name'], $dir . $filename);
     return 'uploads/' . $subdir . '/' . $filename;
+}
+
+/**
+ * Turns a valuation's price breakdown into a short plain-language explanation
+ * via Groq (README AI Usage: "generating plain-language explanations of the
+ * price breakdown for users"). Returns null if no API key is configured or
+ * the request fails — the price breakdown table always works without this.
+ *
+ * @param array<int, array{label: string, amount: float}> $breakdown
+ */
+function generate_price_explanation(string $phoneName, array $breakdown, float $finalPrice): ?string
+{
+    if (GROQ_API_KEY === '') {
+        return null;
+    }
+
+    $lines = [];
+    foreach ($breakdown as $row) {
+        $lines[] = $row['label'] . ': ' . ($row['amount'] >= 0 ? '+' : '') . number_format($row['amount']) . ' PKR';
+    }
+
+    $prompt = "A used {$phoneName} was valued at {$finalPrice} PKR in Pakistan. "
+        . "Here is the price breakdown:\n" . implode("\n", $lines) . "\n\n"
+        . "Write a friendly 2-3 sentence explanation for the seller of why the price came out this way. "
+        . "Plain language, no jargon, PKR currency, no markdown formatting.";
+
+    $payload = json_encode([
+        'model' => GROQ_MODEL,
+        'messages' => [
+            ['role' => 'system', 'content' => 'You explain used-phone price valuations to everyday sellers in Pakistan in plain, friendly language.'],
+            ['role' => 'user', 'content' => $prompt],
+        ],
+        'temperature' => 0.4,
+        'max_tokens' => 200,
+    ]);
+
+    $ch = curl_init('https://api.groq.com/openai/v1/chat/completions');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $payload,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . GROQ_API_KEY,
+        ],
+        CURLOPT_TIMEOUT => 8,
+        CURLOPT_CONNECTTIMEOUT => 4,
+    ]);
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $error = curl_error($ch);
+    curl_close($ch);
+
+    if ($response === false || $error || $httpCode !== 200) {
+        error_log('Groq price explanation failed: ' . ($error ?: "HTTP {$httpCode}"));
+        return null;
+    }
+
+    $data = json_decode($response, true);
+    $text = $data['choices'][0]['message']['content'] ?? null;
+    return $text ? trim($text) : null;
 }
