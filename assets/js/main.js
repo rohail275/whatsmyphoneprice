@@ -23,4 +23,24 @@ document.addEventListener('DOMContentLoaded', function () {
         ptaSelect.addEventListener('change', togglePtaWarning);
         togglePtaWarning();
     }
+
+    function openSection(id) {
+        var el = document.getElementById(id);
+        if (!el || el.tagName !== 'DETAILS') return;
+        el.open = true;
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.querySelectorAll('.next-section').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            openSection(btn.getAttribute('data-next'));
+        });
+    });
+
+    document.querySelectorAll('.step-nav a[data-target]').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            openSection(link.getAttribute('data-target'));
+        });
+    });
 });

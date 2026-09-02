@@ -138,6 +138,40 @@ a.card:hover { box-shadow: var(--shadow); transform: translateY(-2px); text-deco
     flex-shrink: 0;
 }
 
+/* Accordion sections (details/summary) — collapsed by default so the form
+   never shows more than one section's worth of fields at once. */
+details.section-card { padding: 0; overflow: hidden; }
+details.section-card > summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: var(--space-3) var(--space-4);
+    font-weight: 700;
+    font-size: 1.05rem;
+    -webkit-tap-highlight-color: transparent;
+}
+details.section-card > summary::-webkit-details-marker { display: none; }
+details.section-card > summary .chevron {
+    margin-inline-start: auto;
+    color: var(--color-muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+}
+details.section-card[open] > summary .chevron { transform: rotate(180deg); }
+details.section-card[open] > summary {
+    border-bottom: 1px solid var(--color-border);
+}
+details.section-card .section-body {
+    padding: var(--space-4);
+}
+.section-next {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: var(--space-3);
+}
+
 /* ---------- Jump nav (form progress) ---------- */
 .step-nav {
     display: flex;
