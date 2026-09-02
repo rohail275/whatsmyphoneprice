@@ -1,0 +1,23 @@
+RewriteEngine On
+
+# /phone/<slug> -> phone.php?slug=<slug>
+RewriteRule ^phone/([a-z0-9-]+)/?$ phone.php?slug=$1 [L,QSA]
+
+# /listing/<id> -> listing.php?id=<id>
+RewriteRule ^listing/([0-9]+)/?$ listing.php?id=$1 [L,QSA]
+
+# Hide .php extension for top-level pages (optional convenience)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{DOCUMENT_ROOT}/$1.php -f
+RewriteRule ^([a-z0-9-]+)/?$ $1.php [L,QSA]
+
+# Never let PHP source or the DB config leak
+<FilesMatch "\.(sql|md)$">
+    Require all denied
+</FilesMatch>
+<Files "db.php">
+    Require all denied
+</Files>
+
+Options -Indexes

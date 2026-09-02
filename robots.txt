@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /config/
+Disallow: /includes/
+Disallow: /sql/
+Disallow: /uploads/
+
+Sitemap: https://whatsmyphoneprice.com/sitemap.php
