@@ -32,8 +32,16 @@ require_once __DIR__ . '/includes/header.php';
 </div>
 <p class="hint" style="text-align:center;margin-top:8px"><?= e(t('estimated_price_note')) ?></p>
 
-<div class="card">
+<?php if (!empty($valuation['ai_explanation'])): ?>
+<div class="ai-explainer" style="margin-top:16px">
+    <div class="ai-label">✨ In plain words</div>
+    <p style="margin:0"><?= e($valuation['ai_explanation']) ?></p>
+</div>
+<?php endif; ?>
+
+<div class="card" style="margin-top:16px">
     <h2>Price Breakdown</h2>
+    <div class="table-scroll">
     <table class="breakdown-table">
         <?php foreach ($breakdown as $row): ?>
             <tr>
@@ -44,6 +52,7 @@ require_once __DIR__ . '/includes/header.php';
             </tr>
         <?php endforeach; ?>
     </table>
+    </div>
 </div>
 
 <div class="card">
